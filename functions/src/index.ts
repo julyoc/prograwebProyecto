@@ -5,10 +5,15 @@ import * as express from 'express';
 const server = express();
 
 (async () => {
-    await admin.initializeApp({
+
+    /*await admin.initializeApp({
         credential: admin.credential.cert(require("../serviceAccountKey.json")),
         databaseURL: "https://proyecto-web-freelancer.firebaseio.com"
-    });
+    });*/
+
+
+    await admin.initializeApp(functions.config().firebase);
+
     await server.use('/api/v0', require('./controllers').rutes);
 })();
 

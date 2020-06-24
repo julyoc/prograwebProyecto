@@ -33,24 +33,20 @@ export const model = function<T> (collectionName: string) {
             }
             return dbusage.createNewDocument(db, collectionName, data);
         }
-/*
-        static find(cb?: (err: any, res?: UserSchema[]) => void): Promise<any[]> | void {
-            if (!cb) return new Promise<any[]>((resolve, reject) => {
+
+        static find(cb?: (err: any, res?: T[] | any) => void): Promise<any[] | any> | void {
+            if (cb) {
                 try {
-                    dbusage.getDocument(db, collectionName, '').then(value => {
+                    dbusage.backup(db, collectionName).then(value => {
                         cb(null, value);
-                    })
+                    });
                 } catch (error) {
-                    reject(error);
+                    cb(error);
                 }
-            });
-            try {
-                
-            } catch (error) {
-                cb(error);
             }
+            return dbusage.backup(db, collectionName);
         }
-*/
+
         static findById(id: string, cb?: (err: any, res?: T) => void): Promise<T> {
             if (cb) {
                 try {
