@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as express from 'express';
-
+import * as cors from 'cors';
 const server = express();
 
 (async () => {
@@ -13,7 +13,7 @@ const server = express();
 
 
     await admin.initializeApp(functions.config().firebase);
-
+    await server.use(cors());
     await server.use('/api/v0', require('./controllers').rutes);
 })();
 

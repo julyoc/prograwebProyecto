@@ -37,8 +37,14 @@ export const model = function<T> (collectionName: string) {
         static find(cb?: (err: any, res?: T[] | any) => void): Promise<any[] | any> | void {
             if (cb) {
                 try {
-                    dbusage.backup(db, collectionName).then(value => {
-                        cb(null, value);
+                    dbusage.backup(db, collectionName).then((value: any) => {
+                        var arr = [];
+                        for (const key in value.User) {
+                            if (Object.prototype.hasOwnProperty.call(value.User, key)) {
+                                arr.push({id: key, ...value.User[key]});
+                            }
+                        }
+                        cb(null, arr);
                     });
                 } catch (error) {
                     cb(error);

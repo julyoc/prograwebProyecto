@@ -23,10 +23,16 @@ rutes.route('/user').post((req, res) => {
     });
 }).get((req, res) => {
     const { userId }: any = req.query;
-    User.findById(userId).then(value => {
-        res.json(value);
-    }).catch(err => {
-        throw err;
+    if (userId) {
+        User.findById(userId).then(value => {
+            res.json(value);
+        }).catch(err => {
+            throw err;
+        });
+    }
+    User.find((err, doc) => {
+        if (err) throw err;
+        res.json(doc);
     });
 }).put((req, res) => {
     const { userId }: any = req.query;
@@ -70,11 +76,34 @@ rutes.route('/creator').post((req, res) => {
     });
 
 }).get((req, res) => {
-
+    const { idCreator }:any = req.query;
+    if (idCreator) Creator.findById(idCreator, (err, doc) => {
+        if (err) throw err;
+        res.json(doc)
+    });
+    Creator.find((err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
 }).put((req, res) => {
-
+    const { creations, ratings, categories } = req.body;
+    const { userId, idCreator }: any =req.query;
+    const data: CreatorSchema = {
+        userId,
+        creations,
+        ratings,
+        categories
+    }
+    Creator.update(idCreator, data, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'creator was updated'});
+    });
 }).delete((req, res) => {
-
+    const { idCreator }: any =req.query;
+    Creator.delete(idCreator, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'creator was deleted'})
+    });
 });
 
 /**
@@ -106,7 +135,11 @@ rutes.route('/categories').post((req, res) => {
     });
 }).get((req, res) => {
     const { categoriesId }: any = req.query;
-    Categories.findById(categoriesId, (err, doc) => {
+    if (categoriesId) Categories.findById(categoriesId, (err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
+    Categories.find((err, doc) => {
         if (err) throw err;
         res.json(doc);
     });
@@ -146,11 +179,33 @@ rutes.route('/subcategories').post((req, res) => {
         res.json(doc);
     });
 }).get((req, res) => {
-
+    const { subcategoriesId }: any = req.query;
+    if (subcategoriesId) SubCategories.findById(subcategoriesId, (err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
+    SubCategories.find((err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    })
 }).put((req, res) => {
-
+    const { name, description }: any = req.body;
+    const { categoriesId,  subcategoriesId }: any = req.query;
+    const data: SubCategoriesSchema = {
+        name,
+        description,
+        categoriesId
+    };
+    SubCategories.update(subcategoriesId, data, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'subcategory was updated'});
+    });
 }).delete((req, res) => {
-
+    const { subcategoriesId }: any = req.query;
+    SubCategories.delete(subcategoriesId, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'subcategory was deleted'});
+    });
 });
 
 /**
@@ -172,11 +227,35 @@ rutes.route('/rate').post((req, res) => {
         res.json(doc);
     });
 }).get((req, res) => {
-
+    const { rateId }: any = req.query;
+    if (rateId) Rate.findById(rateId, (err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
+    Rate.find((err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
 }).put((req, res) => {
-
+    const { name, price, benefits, type } = req.body;
+    const { creatorId, rateId }: any = req.query;
+    const data: RateSchema = {
+        creatorId,
+        name,
+        price,
+        benefits,
+        type
+    };
+    Rate.update(rateId, data, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'rate was updated'});
+    });
 }).delete((req, res) => {
-
+    const { rateId }: any = req.query;
+    Rate.delete(rateId, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'rate was deleted'});
+    });
 });
 
 /**
@@ -200,11 +279,37 @@ rutes.route('/contract').post((req, res) => {
         res.json(doc);
     });
 }).get((req, res) => {
-
+    const { contractId }: any = req.query;
+    if (contractId) Contract.findById(contractId, (err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
+    Contract.find((err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
 }).put((req, res) => {
-
+    const { name, description, charged, paidOut } = req.body;
+    const { rateId, userId, creatorId, contractId }: any = req.query;
+    const data: ContractSchema = {
+        rateId,
+        userId,
+        creatorId,
+        name,
+        description,
+        charged,
+        paidOut
+    };
+    Contract.update(contractId, data, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'contract was updated'});
+    });
 }).delete((req, res) => {
-
+    const { contractId }: any = req.query;
+    Contract.delete(contractId, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'contract was deleted'});
+    });
 });
 
 /**
@@ -224,11 +329,33 @@ rutes.route('/statuscontract').post((req, res) => {
         res.json(doc)
     })
 }).get((req, res) => {
-
+    const { statusId }: any = req.query;
+    if (statusId) StatusContract.findById(statusId, (err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
+    StatusContract.find((err, doc) => {
+        if (err) throw err;
+        res.json(doc);
+    });
 }).put((req, res) => {
-
+    const { description, stage } = req.body;
+    const { contractId, statusId }: any = req.query;
+    const data: StatusContractSchema = {
+        contractId,
+        stage,
+        description
+    };
+    StatusContract.update(statusId, data, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'status was updated'});
+    });
 }).delete((req, res) => {
-
+    const { statusId }: any = req.query;
+    StatusContract.delete(statusId, (err, doc) => {
+        if (err) throw err;
+        res.json({massage: 'status was deleted'});
+    });
 });
 
 export { rutes };
